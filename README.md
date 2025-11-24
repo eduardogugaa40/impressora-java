@@ -148,3 +148,8 @@ Implementar melhor tratamento de erros
 📄 Licença
 
 Este projeto é aberto para uso educacional e integração com equipamentos Elgin.
+
+Autores:
+Eduardo Silva
+Lucca de Toledo Trentini
+Pedro Joaquim
