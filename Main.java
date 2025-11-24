@@ -63,11 +63,14 @@ public class Main {
 
     public static void configurarConexao() {
         System.out.println("--- CONFIGURAÇÃO DE CONEXÃO ---");
-
-        tipo = 1;
-        modelo = "i9";
-        conexao = "USB";
-        parametro = 0;
+        System.out.println("Digite o tipo: ");
+        tipo = Scanner.nextInt();
+        System.out.println("Digite o modelo: ");
+        modelo = Scanner.next();
+        System.out.println("Digite o modelo: ");
+        conexao = Scanner.next();
+        System.out.println("Digite o parametro: ");
+        parametro = Scanner.nextInt();
         System.out.println("Configuração salva!\n");
     }
 
