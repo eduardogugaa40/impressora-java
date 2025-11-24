@@ -1,15 +1,15 @@
-# Projeto Java – Integração com Impressora Elgin via DLL (JNA)
+# Sistema de Impressão Java com DLL — Impressoras Elgin (JNA)
 
-Este projeto demonstra como realizar a comunicação entre uma aplicação Java e a impressora Elgin por meio de uma DLL nativa, utilizando a biblioteca JNA (Java Native Access).
-Ele inclui funções de conexão, impressão de texto, QRCode, código de barras, XML SAT, sinal sonoro, avanço de papel e corte.
+Este projeto demonstra a integração entre Java e impressoras Elgin por meio da DLL E1_Impressora01.dll, utilizando a biblioteca JNA (Java Native Access).
+Com ele, é possível realizar impressões de texto, QR Code, código de barras, XML SAT, XML de cancelamento, além de acionar gavetas e emitir sinais sonoros.
 
-Funcionalidades
+🚀 Recursos Disponíveis
 
-O programa possui um menu interativo no terminal, permitindo executar:
+O menu interativo permite realizar:
 
-🔧 Conexão
+🔌 Conexão
 
-Configurar conexão com a impressora
+Configurar conexão (modelo, tipo e interface)
 
 Abrir conexão
 
@@ -19,35 +19,53 @@ Fechar conexão
 
 Impressão de texto
 
-Impressão de QRCode
+Impressão de QR Code
 
 Impressão de código de barras
 
 Impressão de XML SAT
 
-🔔 Outras Funções
+Impressão de XML de cancelamento SAT
 
-Avançar papel
+📦 Acessórios
+
+Abrir gaveta Elgin
+
+Abrir gaveta padrão
+
+Avanço de papel
 
 Corte de papel
 
-Estrutura do Projeto
+Sinal sonoro (beep)
+
+📁 Estrutura do Código
 Main.java
 |
 |-- Interface ImpressoraDLL
-|       - Mapeia todas as funções da DLL usando JNA
+|      - Mapeia funções da DLL via JNA
 |
-|-- Menu principal com opções de impressão e controle da impressora
+|-- Métodos de controle
+|      - abrirConexao()
+|      - fecharConexao()
+|      - impressaoTexto()
+|      - impressaoQRCode()
+|      - impressaoCodBarra()
+|      - impressaoXMLSAT()
+|      - impressaoXMLcancSAT()
+|      - abrirGaveta()
+|      - abrirGavetaElgin()
+|      - sinalSonoro()
+|      - corte()
+|      - avancaPapel()
+|
+|-- Menu principal de interação
 
-🧩 Dependências
+📦 Requisitos
+✔️ Java 11 ou superior
+✔️ Biblioteca JNA
 
-Você precisará instalar:
-
-✔️ JNA (Java Native Access)
-
-Adicione ao seu projeto:
-
-Maven
+Se estiver usando Maven:
 
 <dependency>
     <groupId>net.java.dev.jna</groupId>
@@ -56,43 +74,25 @@ Maven
 </dependency>
 
 
-Ou baixe o JAR manualmente:
-JNA no Maven Central
+Ou baixe o JAR:
+https://mvnrepository.com/artifact/net.java.dev.jna/jna
 
-✔️ DLL da Impressora Elgin
+✔️ DLL da impressora Elgin
 
-A DLL utilizada no código:
+A DLL usada é carregada nesta linha:
 
-C:\Users\...\E1_Impressora01.dll
-
-
-Certifique-se de ajustar o caminho da DLL para o seu ambiente.
-
-⚙️ Configuração da Conexão
-
-A configuração atual utiliza:
-
-tipo = 1;
-modelo = "i9";
-conexao = "USB";
-parametro = 0;
+Native.load("C:\\Users\\...\\E1_Impressora01.dll", ImpressoraDLL.class);
 
 
-Modifique conforme necessário para:
+➡️ Ajuste o caminho para o local correto no seu PC.
 
-Serial
-
-TCP/IP
-
-Diferentes modelos de impressoras Elgin
-
-▶️ Como Executar
+⚙️ Como executar
 
 Instale o JDK 11+
 
-Inclua a biblioteca JNA
+Baixe ou configure o JNA no classpath
 
-Ajuste o caminho da DLL no código
+Garanta que a DLL esteja acessível
 
 Compile:
 
@@ -105,7 +105,7 @@ java Main
 
 🧭 Menu do Sistema
 
-Ao executar, será apresentado:
+Ao abrir o programa, você verá:
 
 1  - Configurar Conexao
 2  - Abrir Conexao
@@ -119,29 +119,32 @@ Ao executar, será apresentado:
 10 - Sinal Sonoro
 0  - Fechar Conexao e Sair
 
-⚠️ Observações Importantes
+⚠️ Observações
 
-Lembre-se de sempre abrir a conexão antes de tentar imprimir.
+Sempre abra a conexão antes de tentar imprimir.
 
 O programa automaticamente avança papel e corta após cada impressão.
 
-O menu atual ainda possui opções sem implementação completa (ex.: XML Cancelamento e gaveta).
+A função de XML de cancelamento requer:
 
-O uso da DLL requer permissões adequadas do Windows.
+XML válido
 
-🛠️ Melhorias Futuras
+Assinatura QR Code válida (string Base64)
 
-Implementar as funções de XML Cancelamento SAT e abertura de gaveta
+O menu fecha o scanner ao sair, então o programa termina por completo.
 
-Criar interface gráfica (JavaFX ou Swing)
+🛠️ Pontos Melhoráveis
 
-Adicionar testes automatizados
+Externalizar configurações em um arquivo JSON/YAML
 
-Parametrizar modelos e tipos de conexão via arquivo externo
+Criar uma interface gráfica em JavaFX
+
+Validar XMLs antes de enviar para a DLL
+
+Criar logs de execução
+
+Implementar melhor tratamento de erros
 
 📄 Licença
 
-Este projeto pode ser utilizado livremente para fins educacionais e integração com impressoras Elgin.
-Sinal sonoro
-
-Abertura de gaveta (Elgin e padrão)
+Este projeto é aberto para uso educacional e integração com equipamentos Elgin.
