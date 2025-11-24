@@ -1,8 +1,6 @@
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import java.util.Scanner;
-import javax.swing.JFileChooser;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.io.FileInputStream;
@@ -35,7 +33,7 @@ public class Main {
         int ImpressaoCodigoBarras(int tipo, String dados, int altura, int largura, int HRI);
         int AvancaPapel(int linhas);
         int StatusImpressora(int param);
-        int AbreGavetaElgin();
+        int AbreGavetaElgin(int i, int tempoini, int tempoFim);
         int AbreGaveta(int pino, int ti, int tf);
         int SinalSonoro(int qtd, int tempoInicio, int tempoFim);
         int ModoPagina();
@@ -64,13 +62,12 @@ public class Main {
     public static void configurarConexao() {
         System.out.println("--- CONFIGURAÇÃO DE CONEXÃO ---");
         System.out.println("Digite o tipo: ");
-        tipo = Scanner.nextInt();
+        tipo = scanner.nextInt();
         System.out.println("Digite o modelo: ");
-        modelo = Scanner.next();
-        System.out.println("Digite o modelo: ");
-        conexao = Scanner.next();
-        System.out.println("Digite o parametro: ");
-        parametro = Scanner.nextInt();
+        modelo = scanner.next().toLowerCase();
+        System.out.println("Digite a conexao: ");
+        conexao = scanner.next().toUpperCase();
+        parametro = 0;
         System.out.println("Configuração salva!\n");
     }
 
@@ -163,7 +160,7 @@ public class Main {
 
     public static void impressaoXMLSAT() {
         if (conexaoAberta) {
-            String dados = "path=C:\\XMLSAT.xml"
+            String dados = "path=C:\\XMLSAT.xml";
 
             int resultado = ImpressoraDLL.INSTANCE.ImprimeXMLSAT(dados, 0);
             if (resultado != 0) {
@@ -200,7 +197,7 @@ public class Main {
     }
 
     public static void abrirGavetaElgin() {
-        int resultado = ImpressoraDLL.INSTANCE.AbreGavetaElgin(1, 50, 50);
+        int resultado = ImpressoraDLL.INSTANCE.AbreGavetaElgin(1,50,50);
         if (conexaoAberta) {
             if (resultado != 0){
                 System.out.println("Houve um erro. Código: "+resultado);
