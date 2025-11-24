@@ -163,11 +163,9 @@ public class Main {
 
     public static void impressaoXMLSAT() {
         if (conexaoAberta) {
-            System.out.println("Digite o conteudo do XML: ");
-            String dados = scanner.nextLine();
-            System.out.println("Digite o parametro que modifica o cupom a ser impresso: ");
-            int param = scanner.nextInt();
-            int resultado = ImpressoraDLL.INSTANCE.ImprimeXMLSAT(dados, param);
+            String dados = "path=C:\\XMLSAT.xml"
+
+            int resultado = ImpressoraDLL.INSTANCE.ImprimeXMLSAT(dados, 0);
             if (resultado != 0) {
                 System.out.println("Houve um erro. Código: "+resultado);
             }
@@ -178,11 +176,10 @@ public class Main {
 
     public static void impressaoXMLcancSAT() {
         if (conexaoAberta) {
-            System.out.println("Digite o conteudo do XML: ");
-            String dados = scanner.nextLine();
-            System.out.println("Digite o parametro que modifica o cupom a ser impresso: ");
-            int param = scanner.nextInt();
-            int resultado = ImpressoraDLL.INSTANCE.ImprimeXMLCancelamentoSAT(dados, Q5DLkpdRijIRGY6YSSNsTWK1TztHL1vD0V1Jc4spo/CEUqICEb9SFy82ym8EhBRZjbh3btsZhF+sjHqEMR159i4agru9x6KsepK/q0E2e5xlU5cv3m1woYfgHyOkWDNcSdMsS6bBh2Bpq6s89yJ9Q6qh/J8YHi306ce9Tqb/drKvN2XdE5noRSS32TAWuaQEVd7u+TrvXlOQsE3fHR1D5f1saUwQLPSdIv01NF6Ny7jZwjCwv1uNDgGZONJdlTJ6p0ccqnZvuE70aHOI09elpjEO6Cd+orI7XHHrFCwhFhAcbalc+ZfO5b/+vkyAHS6CYVFCDtYR9Hi5qgdk31v23w==,param);
+            String dados = "path=C:\\CANC_SAT.xml";
+            int param = 0;
+            String assQRCode = "Q5DLkpdRijIRGY6YSSNsTWK1TztHL1vD0V1Jc4spo/CEUqICEb9SFy82ym8EhBRZjbh3btsZhF+sjHqEMR159i4agru9x6KsepK/q0E2e5xlU5cv3m1woYfgHyOkWDNcSdMsS6bBh2Bpq6s89yJ9Q6qh/J8YHi306ce9Tqb/drKvN2XdE5noRSS32TAWuaQEVd7u+TrvXlOQsE3fHR1D5f1saUwQLPSdIv01NF6Ny7jZwjCwv1uNDgGZONJdlTJ6p0ccqnZvuE70aHOI09elpjEO6Cd+orI7XHHrFCwhFhAcbalc+ZfO5b/+vkyAHS6CYVFCDtYR9Hi5qgdk31v23w==";
+            int resultado = ImpressoraDLL.INSTANCE.ImprimeXMLCancelamentoSAT(dados, assQRCode,param);
             if (resultado != 0) {
                 System.out.println("Houve um erro. Código: "+resultado);
             }
