@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.io.FileInputStream;
-import java.util.Scanner;
 
 public class Main {
 
@@ -15,7 +14,7 @@ public class Main {
 
         // Caminho completo para a DLL
         ImpressoraDLL INSTANCE = (ImpressoraDLL) Native.load(
-                "C:\\Users\\richard.spanhol\\Downloads\\Java-Aluno Graduacao\\E1_Impressora01.dll",
+                "C:\\Users\\eduardo_silva02\\Desktop\\Java-Aluno Graduacao\\E1_Impressora01.dll",
                 ImpressoraDLL.class
         );
 
@@ -57,11 +56,14 @@ public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
 
-    // =====================================================
-    // CONFIGURAÇÃO DE CONEXÃO
-    // =====================================================
+    private static String capturarEntrada(String mensagem) {
+        System.out.print(mensagem);
+        return scanner.nextLine();
+    }
+
     public static void configurarConexao() {
         System.out.println("--- CONFIGURAÇÃO DE CONEXÃO ---");
+
         tipo = 1;
         modelo = "i9";
         conexao = "USB";
@@ -73,8 +75,15 @@ public class Main {
         if (conexaoAberta) {
             System.out.println("Conexão já está aberta.");
         } else {
-            conexaoAberta = true;
-            System.out.println("Conexão aberta com sucesso! (SIMULAÇÃO)");
+            int resultado = ImpressoraDLL.INSTANCE.AbreConexaoImpressora(tipo,modelo,conexao,parametro);
+            if(resultado == 0){
+                conexaoAberta = true;
+                System.out.println("Conexão aberta com sucesso!");
+
+            }else{
+                System.out.println("Erro ao abrir conexão. Código "+resultado);
+            }
+
         }
     }
 
@@ -83,130 +92,168 @@ public class Main {
             System.out.println("Nenhuma conexão para fechar.");
         } else {
             conexaoAberta = false;
-            System.out.println("Conexão fechada com sucesso! (SIMULAÇÃO)");
+            int resultado = ImpressoraDLL.INSTANCE.FechaConexaoImpressora();
+            System.out.println("Conexão fechada com sucesso!");
         }
     }
 
-    // =====================================================
-    // FUNÇÕES DE IMPRESSÃO (SIMULADAS)
-    // =====================================================
-
-    public static void ImpressaoTexto() {
-        if (!conexaoAberta) {
+    public static void impressaoTexto() {
+        if(conexaoAberta){
+            System.out.println("Digite um texto abaixo: ");
+            String dados = scanner.nextLine();
+            ImpressoraDLL.INSTANCE.ImpressaoTexto(dados,1,4,0);
+        }else{
             System.out.println("A conexão não está aberta!");
-            return;
         }
-        System.out.println("Digite o texto para imprimir:");
-        String texto = scanner.nextLine();
-
-        System.out.println("\n--- IMPRESSÃO DE TEXTO (SIMULADA) ---");
-        System.out.println("ImpressaoTexto(\"" + texto + "\", 1, 4, 0)");
-        System.out.println("--------------------------------------\n");
     }
 
-    public static void Corte() {
-        System.out.println("Corte(2) — Corte realizado! (SIMULAÇÃO)");
+    public static void corte() {
+        int resultado = ImpressoraDLL.INSTANCE.Corte(2);
+        if (resultado == 0){
+            System.out.println("O corte foi realizado com sucesso!");
+        }else{
+            System.out.println("Houve um erro. Código: "+resultado);
+        }
     }
 
-    public static void ImpressaoQRCode() {
-        if (!conexaoAberta) {
+    public static void impressaoQRCode() {
+        if(conexaoAberta){
+            String dados = scanner.nextLine();
+            int resultado = ImpressoraDLL.INSTANCE.ImpressaoQRCode(dados,6,4);
+            if (resultado != 0){
+                System.out.println("Houve um erro. Código: "+resultado);
+            }
+        } else {
             System.out.println("A conexão não está aberta!");
-            return;
         }
-        System.out.println("Digite o conteúdo do QRCode:");
-        String dados = scanner.nextLine();
-
-        System.out.println("\n--- QR CODE (SIMULADO) ---");
-        System.out.println("ImpressaoQRCode(\"" + dados + "\", 6, 4)");
-        System.out.println("---------------------------\n");
     }
 
-    public static void ImpressaoCodigoBarras() {
-        if (!conexaoAberta) {
+    public static void avancaPapel() {
+        int resultado = ImpressoraDLL.INSTANCE.AvancaPapel(2);
+        if (resultado != 0){
+            System.out.println("Houve um erro. Código: "+resultado);
+        }
+    }
+
+    public static void sinalSonoro() {
+        int resultado = ImpressoraDLL.INSTANCE.SinalSonoro(4,50,5);
+        if (conexaoAberta) {
+            if (resultado != 0){
+                System.out.println("Houve um erro. Código: "+resultado);
+            }
+        } else {
             System.out.println("A conexão não está aberta!");
-            return;
         }
-
-        System.out.println("Digite os dados do código de barras:");
-        String dados = scanner.nextLine();
-
-        System.out.println("\n--- CODIGO DE BARRAS (SIMULADO) ---");
-        System.out.println("ImpressaoCodigoBarras(8, \"{A" + dados + "\", 100, 2, 3)");
-        System.out.println("------------------------------------\n");
     }
 
-    public static void AvancaPapel() {
-        System.out.println("AvancaPapel(2) — Avanço de papel... (SIMULAÇÃO)");
-    }
-
-    public static void AbreGavetaElgin() {
-        System.out.println("AbreGavetaElgin(1, 50, 50)");
-    }
-
-    public static void AbreGaveta() {
-        System.out.println("AbreGaveta(1, 5, 10)");
-    }
-
-    public static void SinalSonoro() {
-        if (!conexaoAberta) {
+    public static void impressaoCodBarra() {
+        if (conexaoAberta) {
+            String dados = scanner.nextLine();
+            int resultado = ImpressoraDLL.INSTANCE.ImpressaoCodigoBarras(8, dados, 100, 2, 3);
+            if (resultado != 0) {
+                System.out.println("Houve um erro. Código: "+resultado);
+            }
+        } else {
             System.out.println("A conexão não está aberta!");
-            return;
         }
-        System.out.println("SinalSonoro(4,5,5) — Bip bip bip! (SIMULAÇÃO)");
     }
 
-    public static void ImprimeXMLSAT() {
-        System.out.println("ImprimeXMLSAT() — SIMULAÇÃO");
+    public static void impressaoXMLSAT() {
+        if (conexaoAberta) {
+            System.out.println("Digite o conteudo do XML: ");
+            String dados = scanner.nextLine();
+            System.out.println("Digite o parametro que modifica o cupom a ser impresso: ");
+            int param = scanner.nextInt();
+            int resultado = ImpressoraDLL.INSTANCE.ImprimeXMLSAT(dados, param);
+            if (resultado != 0) {
+                System.out.println("Houve um erro. Código: "+resultado);
+            }
+        } else {
+            System.out.println("A conexão não está aberta!");
+        }
     }
-
-    public static void ImprimeXMLCancelamentoSAT() {
-        String assQRCode = "Q5DLkpdRijIRGY6YSSNsTWK1TztHL1vD0V1Jc4spo/CEUqICEb9SFy82ym8EhBRZjbh3btsZhF+sjHqEMR159i4agru9x6KsepK/q0E2e5xlU5cv3m1woYfgHyOkWDNcSdMsS6bBh2Bpq6s89yJ9Q6qh/J8YHi306ce9Tqb/drKvN2XdE5noRSS32TAWuaQEVd7u+TrvXlOQsE3fHR1D5f1saUwQLPSdIv01NF6Ny7jZwjCwv1uNDgGZONJdlTJ6p0ccqnZvuE70aHOI09elpjEO6Cd+orI7XHHrFCwhFhAcbalc+ZfO5b/+vkyAHS6CYVFCDtYR9Hi5qgdk31v23w==";
-        System.out.println("ImprimeXMLCancelamentoSAT(assQRCode) — SIMULAÇÃO");
-    }
-
-    // =====================================================
-    // MENU
-    // =====================================================
 
     public static void main(String[] args) {
-
         while (true) {
-            System.out.println("\n======= MENU IMPRESSORA =======");
-            System.out.println("1  - Configurar Conexão");
-            System.out.println("2  - Abrir Conexão");
-            System.out.println("3  - Impressão Texto");
-            System.out.println("4  - Impressão QRCode");
-            System.out.println("5  - Impressão Código de Barras");
-            System.out.println("6  - Abrir Gaveta Elgin");
-            System.out.println("7  - Abrir Gaveta");
-            System.out.println("8  - Imprimir XML SAT");
-            System.out.println("9  - Imprimir XML Cancelamento SAT");
+            System.out.println("\n*************************************************");
+            System.out.println("**************** MENU IMPRESSORA *******************");
+            System.out.println("*************************************************\n");
+
+            System.out.println("1  - Configurar Conexao");
+            System.out.println("2  - Abrir Conexao");
+            System.out.println("3  - Impressao Texto");
+            System.out.println("4  - Impressao QRCode");
+            System.out.println("5  - Impressao Cod Barras");
+            System.out.println("6  - Impressao XML SAT");
+            System.out.println("7  - Impressao XML Canc SAT");
+            System.out.println("8  - Abrir Gaveta Elgin");
+            System.out.println("9  - Abrir Gaveta");
             System.out.println("10 - Sinal Sonoro");
-            System.out.println("0  - Fechar Conexão e Sair");
-            System.out.println("===============================");
+            System.out.println("0  - Fechar Conexao e Sair");
+            System.out.println("--------------------------------------");
 
-            System.out.print("Escolha: ");
+            //String escolha = capturarEntrada("\nDigite a opção desejada: ");
+            System.out.println("Digite a opção desejada: ");
             int escolha = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); //limpar o buffer
+            if (escolha!=0) {
+                switch (escolha) {
+                    case 1:
+                        configurarConexao();
+                        break;
+                    case 2:
+                        abrirConexao();
+                        break;
+                    case 3:
+                        impressaoTexto();
+                        avancaPapel();
+                        corte();
+                        break;
 
-            if (escolha == 0) break;
+                    case 4:
+                        impressaoQRCode();
+                        avancaPapel();
+                        corte();
+                        break;
 
-            switch (escolha) {
-                case 1 -> configurarConexao();
-                case 2 -> abrirConexao();
-                case 3 -> { ImpressaoTexto(); AvancaPapel(); Corte(); }
-                case 4 -> { ImpressaoQRCode(); AvancaPapel(); Corte(); }
-                case 5 -> { ImpressaoCodigoBarras(); AvancaPapel(); Corte(); }
-                case 6 -> AbreGavetaElgin();
-                case 7 -> AbreGaveta();
-                case 8 -> ImprimeXMLSAT();
-                case 9 -> ImprimeXMLCancelamentoSAT();
-                case 10 -> SinalSonoro();
-                default -> System.out.println("Opção inválida!");
+                    case 5:
+                        impressaoCodBarra();
+                        avancaPapel();
+                        corte();
+                        break;
+
+                    case 6:
+                        impressaoXMLSAT();
+                        avancaPapel();
+                        corte();
+                        break;
+
+                    case 7:
+                        break;
+
+                    case 8:
+                        break;
+
+                    case 9:
+                        break;
+
+                    case 10:
+                        sinalSonoro();
+                        break;
+
+                    default:
+                        System.out.println("Número inválido. Selecione conforme o menu");
+                }
+            }else{
+                fecharConexao();
             }
+            System.out.println("Você saiu do sistema.");
+            scanner.close();
+
         }
 
-        fecharConexao();
-        System.out.println("Você saiu do sistema.");
     }
+
+
+
 }
