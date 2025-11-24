@@ -1,4 +1,4 @@
-# Sistema de Impressão Java com DLL — Impressoras Elgin (JNA)
+# Sistema de Impressão Java com DLL — Impressoras Elgin (JNA).
 
 Este projeto demonstra a integração entre Java e impressoras Elgin por meio da DLL E1_Impressora01.dll, utilizando a biblioteca JNA (Java Native Access).
 Com ele, é possível realizar impressões de texto, QR Code, código de barras, XML SAT, XML de cancelamento, além de acionar gavetas e emitir sinais sonoros.
